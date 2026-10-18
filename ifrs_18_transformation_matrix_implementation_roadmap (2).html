@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إطار التحول والشرح الشامل لمعيار IFRS 18</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#035485',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+        <!-- Header -->
+        <header class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-wider mb-1">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+                        إطار التقييم والتطبيق المعياري
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">المعيار الدولي للتقرير المالي IFRS 18</h1>
+                    <p class="text-slate-600 text-sm mt-1">العرض والإفصاح في القوائم المالية (البديل المباشر لمعيار المحاسبة الدولي IAS 1)</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                        تاريخ التطبيق: 1 يناير 2027
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-50 text-brand-700 border border-blue-200">
+                        سنة المقارنة: 2026
+                    </span>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex border-b border-slate-200 mt-6 gap-2 sm:gap-6 text-xs sm:text-sm font-bold overflow-x-auto custom-scrollbar">
+                <button onclick="switchTab('overview')" id="tab-btn-overview" class="pb-3 border-b-2 border-brand-600 text-brand-600 transition-colors whitespace-nowrap flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    الشرح والأهداف الأساسية
+                </button>
+                <button onclick="switchTab('structure')" id="tab-btn-structure" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors whitespace-nowrap flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+                    تحول قائمة الأرباح أو الخسائر
+                </button>
+                <button onclick="switchTab('matrix')" id="tab-btn-matrix" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors whitespace-nowrap flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 2 2 0 01-2-2V5a2 2 2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 2 2 0 01-2 2z"></path></svg>
+                    مصفوفة التصنيف وقواعد التوجيه
+                </button>
+                <button onclick="switchTab('roadmap')" id="tab-btn-roadmap" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors whitespace-nowrap flex items-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 2 2 0 00-2-2H5a2 2 2 2 0 00-2 2v12a2 2 2 2 0 002 2z"></path></svg>
+                    خارطة طريق التنفيذ
+                </button>
+            </div>
+        </header>
+
+        <!-- VIEW 0: Шرح تفصيلي وأهداف المعيار -->
+        <main id="view-overview" class="space-y-6">
+            <!-- Introduction Banner -->
+            <div class="bg-gradient-to-r from-brand-900 via-brand-800 to-slate-900 text-white rounded-2xl p-6 shadow-md">
+                <h2 class="text-xl sm:text-2xl font-bold mb-2">لماذا تم إصدار المعيار الدولي IFRS 18؟</h2>
+                <p class="text-slate-200 text-sm leading-relaxed max-w-4xl">
+                    تم إصدار **IFRS 18** لتحسين طريقة تقديم القوائم المالية، وبشكل خاص قائمة الأرباح أو الخسائر (P&L). تحت المعيار القديم (IAS 1)، كانت الشركات تمتلك حرية كبيرة في تعريفي وإدراج "الربح التشغيلي" والمؤشرات المالية غير القياسية، مما أدى إلى صعوبة المقارنة بين الشركات. يهدف IFRS 18 إلى تحقيق **الاتساق، والشفافية، والحد من التباين في الممارسات المحاسبية**.
+                </p>
+            </div>
+
+            <!-- 3 Main Pillars Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pillar 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-sky-100 text-brand-600 flex items-center justify-center font-bold text-xl mb-4">
+                            1
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-2">فئات ومجاميع فرعية محددة</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            يقسم المعيار قائمة الدخل إلى **5 فئات رئيسية**: (التشغيل، الاستثمار، التمويل، ضريبة الدخل، والعمليات المتوقفة)، وينشئ **مجموعين فرعيين إلمزاميين**:
+                        </p>
+                        <ul class="mt-3 space-y-1.5 text-xs text-slate-700 list-disc list-inside font-medium">
+                            <li>الربح التشغيلي (Operating Profit)</li>
+                            <li>الربح قبل التمويل وضريبة الدخل (PBFIT)</li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-brand-600 font-semibold">
+                        يمنع الاجتهادات الشخصية في تحديد الربح التشغيلي.
+                    </div>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-xl mb-4">
+                            2
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-2">مقياس أداء الإدارة (MPMs)</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            يتطلب المعيار الإفصاح عن المكملات غير القياسية (Non-GAAP) التي تستخدمها الإدارة في التواصل مع المستثمرين (مثل Adjusted EBITDA) داخل **إيضاح مخصص واحد** في الإيضاحات المتممة، مع إلزامية:
+                        </p>
+                        <ul class="mt-3 space-y-1.5 text-xs text-slate-700 list-disc list-inside font-medium">
+                            <li>مطابقتها بالكامل مع أقرب مجموع فرعي في IFRS</li>
+                            <li>شرح أسباب إعدادها وطريقة حسابها</li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-purple-700 font-semibold">
+                        تخضع مقاييس MPMs لمراجعة المراجع الخارجي لأول مرة.
+                    </div>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xl mb-4">
+                            3
+                        </div>
+                        <h3 class="text-base font-bold text-slate-900 mb-2">مبادئ التجميع والتفكيك</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            وضع المعيار قواعد محددة لتجميع وتفكيك البنود في القوائم المالية والإيضاحات:
+                        </p>
+                        <ul class="mt-3 space-y-1.5 text-xs text-slate-700 list-disc list-inside font-medium">
+                            <li>منع تجميع البنود ذات الخصائص المختلفة كبند واحد</li>
+                            <li>اشتراط استخدام وصف دقيق بدلاً من البنود العامة مثل "مصاريف أخرى"</li>
+                            <li>توفير إرشادات حول عرض المصاريف حسب الطبيعة أو الوظيفة</li>
+                        </ul>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-emerald-700 font-semibold">
+                        تعزيز الشفافية ومنع إخفاء التفاصيل في الحسابات التجميعية.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Explanation of Categories -->
+            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">الفئات الخمس الرئيسية تحت IFRS 18 بالتفصيل</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="p-4 rounded-xl bg-sky-50 border border-sky-200">
+                        <span class="text-xs font-bold text-sky-800 uppercase block mb-1">1. الفئة التشغيلية</span>
+                        <p class="text-xs text-slate-600">تضم جميع الإيرادات والمصاريف الناتجة عن الأنشطة الرئيسية للشركة. تُعد هذه الفئة المتممة (Residual Category) لأي بند لا ينتمي للفئات الأخرى.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200">
+                        <span class="text-xs font-bold text-emerald-800 uppercase block mb-1">2. فئة الاستثمار</span>
+                        <p class="text-xs text-slate-600">تتضمن العوائد والمصاريف الناتجة عن الاستثمارات المستقلة (مثل الحصص في الشركات الزميلة والمشاريع المشتركة، السندات، والاستثمارات العقارية).</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200">
+                        <span class="text-xs font-bold text-indigo-800 uppercase block mb-1">3. فئة التمويل</span>
+                        <p class="text-xs text-slate-600">تضم التكاليف والعوائد المتعلقة بتدبير رأس المال والالتزامات التمويلية (مثل فوائد القروض والسندات والتزامات عقود الإيجار).</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-100 border border-slate-300">
+                        <span class="text-xs font-bold text-slate-800 uppercase block mb-1">4. ضريبة الدخل</span>
+                        <p class="text-xs text-slate-600">مصروفات وفرص الاسترداد الضريبي المحسوبة وفقاً لمعيار المحاسبة الدولي IAS 12.</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-rose-50 border border-rose-200">
+                        <span class="text-xs font-bold text-rose-800 uppercase block mb-1">5. العمليات المتوقفة</span>
+                        <p class="text-xs text-slate-600">تضم نتائج الأنشطة والقطاعات المستغنى عنها وفقاً للمعيار الدولي IFRS 5.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- VIEW 1: P&L Structure Transformation -->
+        <main id="view-structure" class="hidden space-y-6">
+            <!-- Information Callout -->
+            <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-4 flex items-start gap-3">
+                <svg class="w-5 h-5 text-brand-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="text-sm text-slate-700">
+                    <span class="font-bold text-slate-900">ملاحظة هامة حول الهيكلة:</span> ينشئ المعيار IFRS 18 هيكلاً إجبارياً يمنع نقل بنود مثل (حصة الأرباح من الشركات الزميلة) إلى داخل الربح التشغيلي كما كان متبعاً سابقاً، مما يضمن تقييم أداء النشاط الأساسي بشكل معزول ومستقل.
+                </div>
+            </div>
+
+            <!-- Side-by-Side Comparison Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Legacy IAS 1 Model -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                            <h2 class="text-base font-bold text-slate-800">الهيكل المتبع سابقاً (IAS 1)</h2>
+                            <span class="text-xs bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md font-bold">ممارسات غير متناسقة</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">مرونة عالية أدت لتفاوت تعريف الربح التشغيلي ودمج المؤشرات غير المحاسبية داخل قائمة الدخل.</p>
+                        
+                        <!-- IAS 1 Line Items -->
+                        <div class="space-y-2 text-xs sm:text-sm">
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                                <span class="font-medium text-slate-700">الإيرادات</span>
+                                <span class="font-mono text-slate-900">$10,000,000</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                                <span class="text-slate-600">تكلفة المبيعات</span>
+                                <span class="font-mono text-slate-900">($6,000,000)</span>
+                            </div>
+                            <div class="p-3 bg-slate-100/80 rounded-lg border border-slate-300 flex justify-between items-center font-bold text-slate-800">
+                                <span>مجمل الربح</span>
+                                <span class="font-mono">$4,000,000</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                                <span class="text-slate-600">المصاريف التشغيلية والإدارية</span>
+                                <span class="font-mono text-slate-900">($1,800,000)</span>
+                            </div>
+                            <div class="p-3 bg-amber-50 rounded-lg border border-amber-200 flex justify-between items-center text-amber-900 font-medium">
+                                <span class="flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    حصة أرباح شركات زميلة (كانت تدمج هنا)
+                                </span>
+                                <span class="font-mono">$250,000</span>
+                            </div>
+                            <div class="p-3 bg-slate-100 rounded-lg border border-slate-300 flex justify-between items-center font-bold text-slate-800">
+                                <span>الربح التشغيلي <span class="text-xs font-normal text-slate-500">(تعريف غير موحد)</span></span>
+                                <span class="font-mono">$2,450,000</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                                <span class="text-slate-600">صافي تكاليف/إيرادات التمويل</span>
+                                <span class="font-mono text-slate-900">($300,000)</span>
+                            </div>
+                            <div class="p-3 bg-slate-100 rounded-lg border border-slate-300 flex justify-between items-center font-extrabold text-slate-900">
+                                <span>الربح قبل الضريبة والعمليات المتوقفة</span>
+                                <span class="font-mono">$2,150,000</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                                <span class="text-slate-600">مصروف ضريبة الدخل (IAS 12)</span>
+                                <span class="font-mono text-slate-900">($350,000)</span>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 flex justify-between items-center">
+                                <span class="text-slate-600">نتائج العمليات المتوقفة بعد الضريبة (IFRS 5)</span>
+                                <span class="font-mono text-slate-900">($100,000)</span>
+                            </div>
+                            <div class="p-3 bg-slate-900 text-white rounded-lg flex justify-between items-center font-extrabold">
+                                <span>صافي الربح النهائي</span>
+                                <span class="font-mono text-base">$1,700,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IFRS 18 Classified Model -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                            <h2 class="text-base font-bold text-slate-900">الهيكل المعياري الجديد (IFRS 18)</h2>
+                            <span class="text-xs bg-brand-50 text-brand-700 border border-brand-200 px-2.5 py-1 rounded-md font-bold">تصنيف قياسي موحد</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">تبويب إجباري مقسم لخمس فئات مع مجاميع فرعية محددة بدقة.</p>
+
+                        <!-- IFRS 18 Structured Line Items -->
+                        <div class="space-y-2 text-xs sm:text-sm">
+                            <!-- Category 1: Operating -->
+                            <div class="p-3 bg-sky-50 border border-sky-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-sky-800 flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full bg-sky-500"></span> 1. الفئة التشغيلية
+                                    </span>
+                                    <span class="text-xs text-sky-700 font-semibold">النشاط الرئيسي</span>
+                                </div>
+                                <div class="flex justify-between items-center text-slate-700 pr-3 border-r-2 border-sky-400">
+                                    <span>الإيرادات، تكلفة المبيعات، المصاريف العمومية والبيع</span>
+                                    <span class="font-mono font-bold">$2,200,000</span>
+                                </div>
+                            </div>
+
+                            <!-- Mandatory Subtotal 1 -->
+                            <div class="p-3 bg-sky-700 text-white rounded-lg shadow-sm flex justify-between items-center font-extrabold">
+                                <span class="flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-sky-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    الربح التشغيلي (مجموع فرعي إلزامي 1)
+                                </span>
+                                <span class="font-mono text-base">$2,200,000</span>
+                            </div>
+
+                            <!-- Category 2: Investing -->
+                            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 2. فئة الاستثمار
+                                    </span>
+                                    <span class="text-xs text-emerald-700 font-semibold">الشركات الزميلة والاستثمارات</span>
+                                </div>
+                                <div class="flex justify-between items-center text-slate-700 pr-3 border-r-2 border-emerald-400">
+                                    <span>حصة الأرباح من الشركات الزميلة والمشاريع المشتركة</span>
+                                    <span class="font-mono font-bold">$250,000</span>
+                                </div>
+                            </div>
+
+                            <!-- Mandatory Subtotal 2 -->
+                            <div class="p-3 bg-emerald-700 text-white rounded-lg shadow-sm flex justify-between items-center font-extrabold">
+                                <span class="flex items-center gap-1.5">
+                                    <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    الربح قبل التمويل وضريبة الدخل (مجموع فرعي إلزامي 2)
+                                </span>
+                                <span class="font-mono text-base">$2,450,000</span>
+                            </div>
+
+                            <!-- Category 3: Financing -->
+                            <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-800 flex items-center gap-1">
+                                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span> 3. فئة التمويل
+                                    </span>
+                                    <span class="text-xs text-indigo-700 font-semibold">التكاليف التمويلية</span>
+                                </div>
+                                <div class="flex justify-between items-center text-slate-700 pr-3 border-r-2 border-indigo-400">
+                                    <span>مصروفات الفوائد والالتزامات التمويلية</span>
+                                    <span class="font-mono font-bold">($300,000)</span>
+                                </div>
+                            </div>
+
+                            <!-- Category 4 & 5: Tax & Discontinued -->
+                            <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex justify-between items-center text-slate-600">
+                                <span class="text-xs font-bold uppercase">4 و 5. الضرائب والعمليات المتوقفة</span>
+                                <span class="font-mono font-bold">($450,000)</span>
+                            </div>
+
+                            <!-- Final Net Profit -->
+                            <div class="p-3 bg-slate-900 text-white rounded-lg flex justify-between items-center font-extrabold">
+                                <span>صافي الربح النهائي</span>
+                                <span class="font-mono text-base">$1,700,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-base font-bold text-slate-900 mb-2">توزيع القيم المالية حسب الفئات الجديدة للمعيار</h3>
+                <p class="text-xs text-slate-500 mb-4">عرض بياني يوضح القيمة النسبية لكل فئة في قائمة الدخل المعيارية</p>
+                <div class="h-64 w-full">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <!-- VIEW 2: Classification Matrix -->
+        <main id="view-matrix" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="mb-6">
+                    <h2 class="text-lg font-bold text-slate-900">مصفوفة توجيه وتصنيف البنود المالية</h2>
+                    <p class="text-xs text-slate-500 mt-1">توضح هذه المصفوفه التغييرات في التصنيف للبنود الشائعة بين الممارسة السابقة تحت IAS 1 والمتطلبات الإلزامية الجديدة تحت IFRS 18.</p>
+                </div>
+
+                <!-- Matrix Table -->
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-right text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50 text-xs font-bold uppercase text-slate-600">
+                                <th class="p-3">البند المالي</th>
+                                <th class="p-3">الممارسة السابقة (IAS 1)</th>
+                                <th class="p-3">الفئة تحت IFRS 18</th>
+                                <th class="p-3">المجموع الفرعي التأثيري</th>
+                                <th class="p-3">السبب والمنطق المحاسبي</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-xs sm:text-sm">
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 font-bold text-slate-900">أرباح/خسائر الشركات الزميلة والمشاريع المشتركة</td>
+                                <td class="p-3 text-slate-500">تُدرج غالباً ضمن الربح التشغيلي</td>
+                                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">الاستثمار</span></td>
+                                <td class="p-3 text-slate-700">الربح قبل التمويل والضرائب</td>
+                                <td class="p-3 text-slate-500">تستبعد من الربح التشغيلي لأن الاستثمارات تولد عوائد مستقلة عن النشاط الرئيسي.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 font-bold text-slate-900">فروق العملات الأجنبية (FX Gains/Losses)</td>
+                                <td class="p-3 text-slate-500">تكاليف تمويل أو مصاريف أخرى</td>
+                                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">موزعة حسب المعاملة</span></td>
+                                <td class="p-3 text-slate-700">حسب المعاملة الأصلية</td>
+                                <td class="p-3 text-slate-500">تصنف في نفس الفئة الخاصة بالمعاملة المسببة للفروق (مثل: المبيعات = التشغيل، القروض = التمويل).</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 font-bold text-slate-900">صافي الفوائد على منافع الموظفين المحددة (تكلفة التقاعد)</td>
+                                <td class="p-3 text-slate-500">مصاريف تمويلية</td>
+                                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold">التمويل</span></td>
+                                <td class="p-3 text-slate-700">صافي الربح (بعد PBFIT)</td>
+                                <td class="p-3 text-slate-500">تعتبر التزامات ناتجة عن تدبير التمويل طويل الأجل للموظفين.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 font-bold text-slate-900">مشتقات التحوط التشغيلي (Unrealized Hedging Gains)</td>
+                                <td class="p-3 text-slate-500">إيرادات / مصاريف تمويلية</td>
+                                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-sky-100 text-sky-800 text-xs font-bold">التشغيل</span></td>
+                                <td class="p-3 text-slate-700">الربح التشغيلي</td>
+                                <td class="p-3 text-slate-500">أدوات التحوط المصممة لإدارة المخاطر التشغيلية يجب أن تتبع الفئة التشغيلية.</td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition-colors">
+                                <td class="p-3 font-bold text-slate-900">مقاييس أداء الإدارة (EBITDA المعدل)</td>
+                                <td class="p-3 text-slate-500">تدرج بمرونة في القوائم أو العروض</td>
+                                <td class="p-3"><span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 text-xs font-bold">إيضاح مخصص مستقل</span></td>
+                                <td class="p-3 text-slate-700">تسوية مع المجموع القياسي</td>
+                                <td class="p-3 text-slate-500">تتطلب إفصاحاً مدققاً ومفصلاً في إيضاح واحد يوضح أسباب الاستخدام وطريقة الحساب.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- VIEW 3: Implementation Roadmap Timeline -->
+        <main id="view-roadmap" class="hidden space-y-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="mb-8">
+                    <h2 class="text-lg font-bold text-slate-900">خارطة طريق ومراحل التطبيق العملي</h2>
+                    <p class="text-xs text-slate-500 mt-1">المراحل الإلزامية والخطوات المطلوبة للتحول الكامل والالتزام بالمعيار قبل 1 يناير 2027.</p>
+                </div>
+
+                <!-- Timeline Steps -->
+                <div class="relative border-r-2 border-brand-200 mr-4 md:mr-32 space-y-8 pb-4">
+                    <!-- Phase 1 -->
+                    <div class="relative group">
+                        <div class="absolute -right-[17px] top-1.5 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow">
+                            1
+                        </div>
+                        <div class="md:absolute md:-right-36 md:top-2 text-xs font-bold text-brand-600 uppercase tracking-wider mb-1 md:mb-0">
+                            Q3 2024 - Q1 2025
+                        </div>
+                        <div class="mr-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <h3 class="font-bold text-slate-900 text-sm">مرحلة تقييم الأثر وتحليل الفجوات</h3>
+                            <p class="text-xs text-slate-600 mt-1">مراجعة دليل الحسابات (Chart of Accounts)، وحصر جميع المؤشرات غير القياسية (MPMs)، وإعادة رسم خطة تبويب P&L لتناسب الفئات الخمس الجديدة.</p>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="relative group">
+                        <div class="absolute -right-[17px] top-1.5 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold shadow">
+                            2
+                        </div>
+                        <div class="md:absolute md:-right-36 md:top-2 text-xs font-bold text-brand-600 uppercase tracking-wider mb-1 md:mb-0">
+                            Q2 2025 - Q4 2025
+                        </div>
+                        <div class="mr-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <h3 class="font-bold text-slate-900 text-sm">مرحلة تعديل الأنظمة والسياسات (ERP & Systems)</h3>
+                            <p class="text-xs text-slate-600 mt-1">تحديث برامج ERP لتدعم التجميع والتفكيك الآلي، وإعادة برمجة التقارير المالية لتوائم متطلبات IFRS 18 وعزل بند EBITDA المعدل.</p>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="relative group">
+                        <div class="absolute -right-[17px] top-1.5 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold shadow">
+                            3
+                        </div>
+                        <div class="md:absolute md:-right-36 md:top-2 text-xs font-bold text-amber-600 uppercase tracking-wider mb-1 md:mb-0">
+                            السنة المالية 2026
+                        </div>
+                        <div class="mr-6 bg-amber-50/80 border border-amber-200 rounded-xl p-4">
+                            <h3 class="font-bold text-amber-900 text-sm">مرحلة التشغيل الموازي والتجهيز للمقارنة</h3>
+                            <p class="text-xs text-amber-700 mt-1">تسجيل البيانات المالية لسنة 2026 بنظامين (IAS 1 و IFRS 18) لإعداد القوائم المالية المقارنة الإلزامية للسنة القادمة.</p>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4 -->
+                    <div class="relative group">
+                        <div class="absolute -right-[17px] top-1.5 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shadow">
+                            4
+                        </div>
+                        <div class="md:absolute md:-right-36 md:top-2 text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1 md:mb-0">
+                            1 يناير 2027
+                        </div>
+                        <div class="mr-6 bg-emerald-50/80 border border-emerald-200 rounded-xl p-4">
+                            <h3 class="font-bold text-emerald-900 text-sm">التطبيق الإلزامي وإصدار التقارير</h3>
+                            <p class="text-xs text-emerald-700 mt-1">إصدار أول قوائم مالية رسمية ومدققة بالكامل وفق معيار IFRS 18 مع الإفصاح الكامل عن MPMs وتفاصيل المقارنة لسنة 2026.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Tab Switcher Logic
+        function switchTab(tabId) {
+            const tabs = ['overview', 'structure', 'matrix', 'roadmap'];
+            tabs.forEach(tab => {
+                const view = document.getElementById(`view-${tab}`);
+                const btn = document.getElementById(`tab-btn-${tab}`);
+                
+                if (tab === tabId) {
+                    view.classList.remove('hidden');
+                    btn.classList.add('border-brand-600', 'text-brand-600');
+                    btn.classList.remove('border-transparent', 'text-slate-500');
+                } else {
+                    view.classList.add('hidden');
+                    btn.classList.remove('border-brand-600', 'text-brand-600');
+                    btn.classList.add('border-transparent', 'text-slate-500');
+                }
+            });
+        }
+
+        // Chart Initialization
+        window.onload = function() {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['الفئة التشغيلية', 'فئة الاستثمار', 'فئة التمويل', 'الضرائب والعمليات المتوقفة'],
+                    datasets: [{
+                        label: 'القيمة ($)',
+                        data: [2200000, 250000, 300000, 450000],
+                        backgroundColor: [
+                            '#0ea5e9',
+                            '#10b981',
+                            '#6366f1',
+                            '#64748b'
+                        ],
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let value = context.raw || 0;
+                                    return 'القيمة: $' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value / 1000) + 'K';
+                                }
+                            },
+                            grid: {
+                                color: '#f1f5f9'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
